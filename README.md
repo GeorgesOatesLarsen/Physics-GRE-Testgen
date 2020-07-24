@@ -7,6 +7,14 @@ I do not know the extent to which this project will be completed; I will be focu
 
 However, I will create one or more issues for every practice problem I encounter in the wild, up to compliance with copyright. 
 
-Here is an excellent aggregation of resources:
+Initial wave of questions will be sourced from the (publicly available) ETS:
+
+https://www.ets.org/s/gre/pdf/practice_book_physics.pdf
+
+Further waves will be based on the excellent aggregation of resources:
 
 https://jaan.io/how-to-ace-the-gre-and-physics-gre/
+
+Github issues may contain exact copies of questions, but in general, contributions to source code should be problem ***generators*** capable of producing random problems of similar flavor or topic.
+
+I invite any and all who wish to participate. Maybe one day this will be a useful tool to someone besides myself.
