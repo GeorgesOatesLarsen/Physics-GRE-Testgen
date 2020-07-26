@@ -18,7 +18,13 @@ def generatetest(*, nquestions=100, nanswers=5, generatorset=None):
     for weightedgenerator in arrangement:
         pnum += 1
         generator = weightedgenerator["generator"]
-        statement, answers, correct, shuffle = generator.generate(nanswers)
+
+        generated = generator.generate(nanswers)
+        statement = generated['statement']
+        answers = generated['answers']
+        correct = generated['correctn']
+        shuffle = generated['jumble']
+
         finalanswers = answers
         finalcorrect = correct
         if shuffle:
@@ -33,7 +39,7 @@ def generatetest(*, nquestions=100, nanswers=5, generatorset=None):
             finalcorrect = scorrect
 
         problemset.append(makeproblem(pnum, statement, finalanswers))
-        answerkey.append(makeanswer(finalcorrect))
+        answerkey.append(makeanswer(finalcorrect, generator.origin, generator.name, generator.category))
 
     return maketestdoc(problemset, answerkey).dumps()
 
@@ -49,8 +55,8 @@ def makeproblem(pnum, statement, answers):
     return probfrag
 
 
-def makeanswer(correct):
-    return colnum_string(correct + 1)
+def makeanswer(correct, origin, name, category):
+    return NoEscape(colnum_string(correct + 1) + r" \hfill " + origin + "." + name + " (" + category + ")")
 
 
 # Thank you, https://stackoverflow.com/questions/23861680/convert-spreadsheet-number-to-column-letter
@@ -93,8 +99,9 @@ def maketestdoc(problemset, answerkey):
             for problem in problemset:
                 enum.add_item(problem)
 
-    doc.append(Command("clearpage"))
 
+    doc.append(Command("clearpage"))
+    doc.append(Command("onecolumn"))
     with doc.create(Section('Answer Key')):
         with doc.create(Enumerate()) as enum:
             for answer in answerkey:
@@ -127,20 +134,18 @@ class ProblemSet:
         self.totalweight = 0
         self.register(group, 1)
 
-    def register(self, who, weight, category=None):
+    def register(self, who, weight):
         if issubclass(who, ProblemGeneratorGroup):
             localweighttotal = 0
             for weightedgenerator in who.getallweighted(self):
                 localweighttotal += weightedgenerator['weight']
             for weightedgenerator in who.getallweighted(self):
                 self.register(weightedgenerator['generator'],
-                              weightedgenerator['weight'] / localweighttotal * weight,
-                              weightedgenerator['category'])
+                              weightedgenerator['weight'] / localweighttotal * weight)
         elif issubclass(who, ProblemGenerator):
             self.generators.append({
                 'generator': who,
-                'weight': weight,
-                'category': category
+                'weight': weight
             })
             self.weights.append(weight)
             self.totalweight += weight
@@ -153,7 +158,6 @@ class ProblemSet:
         return {
             'generator': generator,
             'weight': weight,
-            'category': category,
         }
 
 

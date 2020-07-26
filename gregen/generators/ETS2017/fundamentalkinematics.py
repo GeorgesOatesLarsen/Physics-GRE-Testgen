@@ -10,14 +10,17 @@ from ... import linguistichelpers as lh
 
 
 class Group(ProblemGeneratorGroup):
+    category = "Fundamental Kinematics"
     @staticmethod
     def getallweighted(set):
-        category = "Fundamental Kinematics"
         return [
-            ProblemSet.weigh(ETS17P1, 1, category)
+            ProblemSet.weigh(ETS17P1, 1)
         ]
 
 class ETS17P1(ProblemGenerator):
+    category = Group.category
+    name = "ETS17P1"
+    origin = "ETS17"
     @staticmethod
     def generate(nanswers):
         ratio_A = mh.friendly_ratio(1)
@@ -88,4 +91,9 @@ class ETS17P1(ProblemGenerator):
             else:
                 answers.append(NoEscape(r"$\displaystyle " + identa + " = " + lh.latex_fraction(1/ratio, oneblank=True) + identb + "$"))
 
-        return NoEscape(statement), answers, correctn, False
+        return {
+            'statement':NoEscape(statement),
+            'answers':answers,
+            'correctn':correctn,
+            'jumble':False
+        }
