@@ -18,3 +18,9 @@ https://jaan.io/how-to-ace-the-gre-and-physics-gre/
 Github issues may contain exact copies of questions, but in general, contributions to source code should be problem ***generators*** capable of producing random problems of similar flavor or topic.
 
 I invite any and all who wish to participate. Maybe one day this will be a useful tool to someone besides myself.
+
+
+Thanks to MOOOWOOO for gitignore.
+
+https://gist.github.com/MOOOWOOO/3cf91616c9f3bbc3d1339adfc707b08a
+
