@@ -91,17 +91,20 @@ def maketestdoc(problemset, answerkey):
 
     doc.preamble.append(pagestyle)
     doc.change_document_style("header")
-    doc.preamble.append(Command("twocolumn"))
     doc.preamble.append(Command('linespread', arguments=['1.25']))
 
-    with doc.create(Section('Practice Test')):
-        with doc.create(Enumerate()) as enum:
-            for problem in problemset:
-                enum.add_item(problem)
+    with doc.create(Center()):
+        doc.append(str(len(problemset)) + " problems - " + str(int(len(problemset)/100 * 170)) + " minutes")
+
+    doc.preamble.append(Command('raggedcolumns'))
+    with doc.create(MultiCols(arguments="2")):
+        with doc.create(Section('Practice Test')):
+            with doc.create(Enumerate()) as enum:
+                for problem in problemset:
+                    enum.add_item(problem)
 
 
     doc.append(Command("clearpage"))
-    doc.append(Command("onecolumn"))
     with doc.create(Section('Answer Key')):
         with doc.create(Enumerate()) as enum:
             for answer in answerkey:
@@ -196,3 +199,7 @@ class SamePage(Environment):
 
 class Equation(Environment):
     _latex_name = 'equation*'
+
+class MultiCols(Environment):
+    _latex_name = 'multicols'
+    packages = [Package("multicol")]
